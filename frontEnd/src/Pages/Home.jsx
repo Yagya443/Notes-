@@ -24,12 +24,12 @@ const Home = () => {
             </div>
 
             <button
-                className="absolute right-2 bottom-2 bg-blue-500 p-4 text-white rounded-xl"
+                className="absolute cursor-pointer right-4 bottom-4 bg-blue-500 p-4 text-white rounded-xl"
                 onClick={() => {
                     setOpenModal({ isShown: true, type: "add", data: null });
                 }}
             >
-                <FaPlus />
+                <FaPlus size={25}/>
             </button>
 
             <Modal
@@ -40,7 +40,7 @@ const Home = () => {
                         left: "50%",
                         top: "50%",
                         translate: "-50% -50%",
-                        height: "450px",
+                        height: "470px",
                         width: "500px",
                         // backgroundColor: "#d9d3d3",
                     },

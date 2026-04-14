@@ -1,0 +1,3 @@
+{
+    "connectionString":"mongodb://yagnaakv99_db_user:SnLe3x4v4UPY_LX@ac-scy4evr-shard-00-00.ruwjnkn.mongodb.net:27017,ac-scy4evr-shard-00-01.ruwjnkn.mongodb.net:27017,ac-scy4evr-shard-00-02.ruwjnkn.mongodb.net:27017/?ssl=true&replicaSet=atlas-fle6nq-shard-0&authSource=admin&appName=notesapp"
+}

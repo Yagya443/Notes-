@@ -1,35 +1,146 @@
-const express=require('express')
+const express = require("express");
+const cors = require("cors");
+const config = require("./config.json");
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const User = require("./models/user.model.js");
 
-const app=express();
+const { authenticationToken } = require("./utils");
+require("dotenv").config();
 
+mongoose.connect(config.connectionString);
+
+const app = express();
+
+//MiddleWares
 app.use(express.json());
+app.use(
+    cors({
+        origin: process.env.CORS || "*",
+    }),
+);
 
-let notes=[]
-
-app.get("/",(req,res)=>{
-    res.send("Server Is Running")
-})
-
-app.get("/notes", (req, res) => {
-    res.json(notes);
+app.get("/", (req, res) => {
+    res.json({ data: "hello" });
 });
 
-app.post("/notes", (req, res) => {
-    console.log("BODY:", req.body); // 👈 IMPORTANT
+app.post("/create-account", async (req, res) => {
+    const { fullname, email, password } = req.body || {};
 
-    const note = req.body;
-    notes.push(note);
+    if (!fullname) {
+        return res
+            .status(400)
+            .json({ error: true, message: "FullName is Required" });
+    }
 
-    res.json({ message: "Note added", notes });
+    if (!email) {
+        return res
+            .status(400)
+            .json({ error: true, message: "email is Required" });
+    }
+    if (!password) {
+        return res
+            .status(400)
+            .json({ error: true, message: "Password is Required" });
+    }
+    const isUser = await User.findOne({ email: email });
+
+    if (isUser) {
+        return res.json({
+            error: true,
+            message: "User already Exist",
+        });
+    }
+
+    const user = new User({
+        fullname,
+        email,
+        password,
+    });
+
+    await user.save();
+
+    const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "30m",
+    });
+
+    return res.json({
+        error: false,
+        user,
+        accessToken,
+        message: "Registration Sucessfull",
+    });
+});
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+
+    
+    if (!email) {
+        return res
+        .status(400)
+        .json({ error: true, message: "Email is Required" });
+    }
+    if (!password) {
+        return res
+        .status(400)
+        .json({ error: true, message: "Password is Required" });
+    }
+    const isUser = await User.findOne({ email: email });
+    if (!isUser) {
+        return res
+            .status(400)
+            .json({ error: true, message: "Account Doesnt Exist" });
+    }
+    if (isUser.email == email && isUser.password == password) {
+        const user = { user: isUser };
+
+        const accessToken = jwt.sign(
+            { user },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+                expiresIn: "30m",
+            },
+        );
+        return res.json({
+            error: false,
+            email,
+            accessToken,
+            message: "Successfully Login",
+        });
+    }
+    else{
+        res.status(400).json({
+            error:true,
+            message:"Invalid Credentials"
+        })
+    }
 });
 
 
-app.delete("/notes/:index", (req, res) => {
-    const index = req.params.index;
-    notes.splice(index, 1);
-    res.json({ message: "Deleted", notes });
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+//
+
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`${process.env.PORT}`);
 });
 
-app.listen(3000,()=>{
-    console.log('Server Running at 3000');
-})
+module.exports = app;

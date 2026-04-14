@@ -33,31 +33,31 @@ const AddNotes = ({ closeModal }) => {
     return (
         <div className="relative ">
             <IoMdClose
-                className="absolute right-0 top-0"
+                className="absolute right-0 top-0 cursor-pointer"
                 size={30}
                 onClick={closeModal}
             />
-            <h2 className="text-2xl">Title</h2>
+            <h2 className="text-3xl">Title</h2>
             <input
                 placeholder="Title"
-                className="border w-full px-1 py-1 "
+                className="border w-full px-1 py-1 mt-1"
                 onChange={(e) => setTitle(e.target.value)}
             />
-            <h2 className="text-2xl ">Content</h2>
+            <h2 className="text-3xl ">Content</h2>
             <textarea
                 placeholder="Content"
                 type="text"
                 onChange={(e) => setContent(e.target.value)}
-                className="border w-full px-1 py-1 h-40"
+                className="border w-full px-1 py-1 h-40 mt-1"
                 height={50}
             />
-            <h2 className="text-2xl mt-0">Tags</h2>
+            <h2 className="text-3xl mt-0">Tags</h2>
 
             <textarea
                 placeholder="Seperate Multiple Tags By Comma"
                 type="text"
                 // value={'dfvghjkl'}
-                className="border w-full px-1 py-1"
+                className="border w-full px-1 py-1 mt-1"
                 onChange={handleTags}
             />
 
