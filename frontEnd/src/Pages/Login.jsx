@@ -1,47 +1,73 @@
 import React, { useState } from "react";
 
 import NavBar from "../Components/NavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { emailValidator } from "../utils/helper";
+import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
     const [display, setDisplay] = useState(true);
+    const navigate = useNavigate();
 
     function emailChange(e) {
         setEmail(e.target.value);
     }
 
     function passwordChange(e) {
-        setPassword(e.target.value);    
+        setPassword(e.target.value);
     }
     function toggleEye() {
         setDisplay(!display);
     }
 
-    function handleLogin(e){
-        e.preventDefault(); 
+    async function handleLogin(e) {
+        e.preventDefault();
 
-        if(!emailValidator(e)){
-            setError("Enter a Valid Email")
+        console.log(emailValidator(email));
+
+        if (!emailValidator(email)) {
+            setError("Enter a Valid Email");
+            console.log();
+
+            return;
         }
+        if (!password) {
+            setError("Enter A Password");
+            return;
+        }
+        try {
+            const response = await axiosInstance.post("/login", {
+                email: email,
+                password: password,
+            });
 
-        if(!password){
-            setError('Enter A Password')
+            if (response.data && response.data.accessToken) {
+                localStorage.setItem("token", response.data.accessToken);
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
+
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.message
+            ) {
+                setError(error.response.data.message);
+            } else {
+                setError("An Unexpected Error Occure");
+            }
         }
     }
-
-    // console.log(error);
-    
 
     return (
         <>
             <NavBar />
-
             <div className="min-h-[80vh] flex items-center justify-center">
                 <form className="border py-4 px-6" onSubmit={handleLogin}>
                     <h2 className=" text-4xl">Login</h2>

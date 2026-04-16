@@ -4,17 +4,15 @@ export const emailValidator = (email) => {
     return emailRegex.test(email);
 };
 
+
+
 export const nameLogo = (e) => {
     const splitedName = e.split(" ");
 
-    
     // ['John', 'Willioms']
 
-    let initials=""
+    let initials = "";
 
-    splitedName.map((event)=>(
-        initials+=event.charAt(0)
-    ))
+    splitedName.map((event) => (initials += event.charAt(0)));
     return initials;
-    
 };

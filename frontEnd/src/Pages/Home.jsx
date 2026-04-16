@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
 import Notes from "../Components/Notes";
 import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Modal from "react-modal";
 import AddNotes from "../Components/AddNotes";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const Home = () => {
     const note = useSelector((state) => state.notes.notes);
@@ -14,6 +16,28 @@ const Home = () => {
         type: "add",
         data: null,
     });
+
+    const [userInfo, setUserInfo] = useState(null);
+
+    const navigate = useNavigate();
+
+    async function getUserInfo() {
+        try {
+            const response = await axiosInstance.get("/get-user");
+            if (response && response.data && response.data.user) {
+                setUserInfo(response.data.user);
+            }
+        } catch (error) {
+            if (error.response.status === 401) {
+                localStorage.clear();
+                navigate("/login");
+            }
+        }
+    }
+
+    useEffect(() => {
+        getUserInfo();
+    }, []);
 
     return (
         <>
@@ -29,7 +53,7 @@ const Home = () => {
                     setOpenModal({ isShown: true, type: "add", data: null });
                 }}
             >
-                <FaPlus size={25}/>
+                <FaPlus size={25} />
             </button>
 
             <Modal

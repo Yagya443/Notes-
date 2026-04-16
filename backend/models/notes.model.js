@@ -16,7 +16,7 @@ const notesSchema = new mongoose.Schema(
             },
         ],
          isPinned: {
-            type: String,
+            type: Boolean,
             default:false,
         },
          userId: {
