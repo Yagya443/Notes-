@@ -15,12 +15,9 @@ export const notesSlice = createSlice({
                 pin.isPinned = !pin.isPinned;
             }
         },
-        deleteNote: (state, action) => {
-            const deleted = state.notes.filter((n) => n.id !== action.payload);
-            state.notes = deleted;
-        },
+        
     },
 });
 
-export const { addNote, deleteNote, togglePin } = notesSlice.actions;
+export const { addNote, togglePin } = notesSlice.actions;
 export default notesSlice.reducer;

@@ -3,14 +3,33 @@ import { FaPen } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 import { MdOutlinePushPin } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { deleteNote, togglePin } from "../redux/notesSlice";
+import { togglePin } from "../redux/notesSlice";
 import EmptyMessage from "./EmptyMessage";
+import axiosInstance from "../utils/axiosInstance";
 
-const Notes = ({ allNotes }) => {
+const Notes = ({ allNotes, getAllNotes }) => {
     const dispatch = useDispatch();
 
-    function handleTogglePin(e) {
-        dispatch(togglePin(e));
+    async function handleTogglePin(id) {
+        
+        try {
+            await axiosInstance.put(`/pin-note/${id}`);
+            await getAllNotes();
+        } catch (error) {
+            console.log("Delete error", error);
+        }
+
+    }
+    
+
+    async function deleteNote(id) {
+        
+        try {
+            await axiosInstance.delete(`/delete-note/${id}`);
+            await getAllNotes();
+        } catch (error) {
+            console.log("Delete error", error);
+        }
     }
 
     return (
@@ -19,7 +38,7 @@ const Notes = ({ allNotes }) => {
                 <div
                     key={idx}
                     className={`relative py-1 px-2  transition-all hover:shadow-xl border-3 ${event.isPinned && "border-blue-500"} `}
-                    onClick={() => handleTogglePin(event.id)}
+                    onClick={() => handleTogglePin(event._id)}
                 >
                     <h1 className="text-2xl font-medium">{event.title}</h1>
                     <h1 className="text-sm">{event.date}</h1>
@@ -39,7 +58,7 @@ const Notes = ({ allNotes }) => {
                             {/* <FaPen size={15} /> */}
                             <MdOutlineDelete
                                 size={30}
-                                onClick={() => dispatch(deleteNote(event.id))}
+                                onClick={() => deleteNote(event._id)}
                             />
                         </div>
                     </div>

@@ -58,7 +58,7 @@ const Home = () => {
             <NavBar userInfo={userInfo}/>
 
             <div className="w-[80vw] min-h-[80vh] relative left-1/2 -translate-x-1/2 top-12">
-                <Notes allNotes={allNotes} />
+                <Notes allNotes={allNotes} getAllNotes={getAllNotes} />
             </div>
 
             <button

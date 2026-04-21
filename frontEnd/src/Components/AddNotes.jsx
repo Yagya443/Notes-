@@ -30,10 +30,6 @@ const AddNotes = ({ closeModal,getAllNotes }) => {
         setTags(splittedTag);
     }
 
-    useEffect(()=>{
-        addingNote()
-    },[])
-
     return (
         <div className="relative ">
             <IoMdClose
