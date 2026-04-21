@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import NavBar from "../Components/NavBar";
 import { emailValidator } from "../utils/helper";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 const SignUp = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
     const [display, setDisplay] = useState(true);
+
+    const navigate=useNavigate()
 
     function usernameChange(e) {
         setUsername(e.target.value);
@@ -25,24 +28,52 @@ const SignUp = () => {
         setDisplay(!display);
     }
 
-    function handleLogin(e) {
+    async function handleSignUp(e) {
         e.preventDefault();
 
         if (!emailValidator(e)) {
             setError("Enter a Valid Email");
         }
-
         if (!password) {
             setError("Enter A Password");
         }
+
+        try {
+            const response=await axiosInstance.post("./create-account",{
+                fullname:username,
+                email,
+                password,
+            })
+
+              if(response.data && response.data.error){
+                setError(response.data.error)
+                return
+            }
+
+            if(response.data && response.data.accessToken){
+                localStorage.setItem("token",response.data.accessToken)
+                navigate("/")
+            }
+
+        } catch (error) {
+            if(response.data && error.response.data && error.response.data.message){
+                setError(error.response.data.message)
+            }
+            else{
+                setError("An Unexpected Error")
+
+            }
+        }
+
     }
+
 
     return (
         <>
             <NavBar />
 
             <div className="min-h-[80vh] flex items-center justify-center">
-                <form className="border py-4 px-6" onSubmit={handleLogin}>
+                <form className="border py-4 px-6" onSubmit={handleSignUp}>
                     <h2 className=" text-4xl">SignUp</h2>
                     <div className="w-full flex flex-col gap-4 mt-4">
                         <input

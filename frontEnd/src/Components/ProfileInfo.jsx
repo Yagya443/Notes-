@@ -2,16 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { nameLogo } from "../utils/helper";
 
-const ProfileInfo = () => {
+const ProfileInfo = ({userInfo}) => {
     // console.log(nameLogo('John Willioms'));
 
     return (
         <div className="flex items-center gap-2">
             <div className="rounded-[100%] bg-gray-200 h-10 w-10 text-xl font-medium grid place-items-center">
-                {nameLogo("John Willioms")}
+                {nameLogo(`${userInfo?.fullname}`)}
             </div>
             <div>
-                <p>Williams</p>
+                <p>{userInfo?.fullname}</p>
                 <Link to="/Login" className="text-blue-400 underline">
                     Logout
                 </Link>

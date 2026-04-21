@@ -28,12 +28,8 @@ const Login = () => {
     async function handleLogin(e) {
         e.preventDefault();
 
-        console.log(emailValidator(email));
-
         if (!emailValidator(email)) {
             setError("Enter a Valid Email");
-            console.log();
-
             return;
         }
         if (!password) {
@@ -64,6 +60,9 @@ const Login = () => {
             }
         }
     }
+
+
+    
 
     return (
         <>

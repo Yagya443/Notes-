@@ -1,34 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { addNote } from "../redux/notesSlice";
+import axiosInstance from "../utils/axiosInstance";
 
-const AddNotes = ({ closeModal }) => {
+const AddNotes = ({ closeModal,getAllNotes }) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [tags, setTags] = useState([]);
 
     const dispatch = useDispatch();
 
-    function addingNote() {
-        dispatch(
-            addNote({
-                id: Date.now(),
-                title,
-                content,
-                tags,
-                // date,
-                isPinned: false,
-            }),
-        );
+    async function addingNote() {
+        await axiosInstance.post("/add-notes", {
+            id: Date.now(),
+            title,
+            content,
+            tags,
+            isPinned: false,
+        });
+        await getAllNotes();
         closeModal();
     }
+
 
     function handleTags(e) {
         const splittedTag = e.target.value.split(",");
 
         setTags(splittedTag);
     }
+
+    useEffect(()=>{
+        addingNote()
+    },[])
 
     return (
         <div className="relative ">

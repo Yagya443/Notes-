@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
 
 const Home = () => {
-    const note = useSelector((state) => state.notes.notes);
 
     const [openModal, setOpenModal] = useState({
         isShown: false,
@@ -18,6 +17,8 @@ const Home = () => {
     });
 
     const [userInfo, setUserInfo] = useState(null);
+    const [allNotes, setAllNotes] = useState([]);
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
@@ -35,16 +36,29 @@ const Home = () => {
         }
     }
 
+    
+    const getAllNotes=async ()=>{
+        try {
+            const response =await axiosInstance.get("/get-notes")
+            
+            if(response.data && response.data.notes){
+                setAllNotes(response.data.notes)
+            }
+        } catch (error) {
+            setError("An Unexpected Error")
+        }
+    }
     useEffect(() => {
         getUserInfo();
+        getAllNotes();
     }, []);
 
     return (
         <>
-            <NavBar />
+            <NavBar userInfo={userInfo}/>
 
             <div className="w-[80vw] min-h-[80vh] relative left-1/2 -translate-x-1/2 top-12">
-                <Notes note={note} />
+                <Notes allNotes={allNotes} />
             </div>
 
             <button
@@ -70,7 +84,7 @@ const Home = () => {
                     },
                 }}
             >
-                <AddNotes closeModal={() => setOpenModal({ isShown: false })} />
+                <AddNotes closeModal={() => setOpenModal({ isShown: false })} getAllNotes={getAllNotes} />
             </Modal>
         </>
     );
