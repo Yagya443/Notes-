@@ -6,27 +6,34 @@ import { useDispatch } from "react-redux";
 import { togglePin } from "../redux/notesSlice";
 import EmptyMessage from "./EmptyMessage";
 import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const Notes = ({ allNotes, getAllNotes }) => {
     const dispatch = useDispatch();
 
     async function handleTogglePin(id) {
-        
         try {
             await axiosInstance.put(`/pin-note/${id}`);
             await getAllNotes();
         } catch (error) {
             console.log("Delete error", error);
         }
-
     }
-    
 
     async function deleteNote(id) {
-        
         try {
             await axiosInstance.delete(`/delete-note/${id}`);
             await getAllNotes();
+
+            toast.warning("Deleted Successfully", {
+                position: "bottom-left",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "dark",
+            });
         } catch (error) {
             console.log("Delete error", error);
         }

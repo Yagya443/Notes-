@@ -45,15 +45,20 @@ const Login = () => {
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
                 navigate("/");
-
             }
-                    toast.success("Login successfully");
-            
+            toast.success("Login successfully", {
+               position: "bottom-left",
+                autoClose: 2000, 
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "dark",
+            });
         } catch (error) {
             console.log(error);
 
-                    toast.success("Something went wrong");
-            
+            toast.error("Something went wrong");
 
             if (
                 error.response &&

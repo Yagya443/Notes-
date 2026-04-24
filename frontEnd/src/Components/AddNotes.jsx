@@ -20,7 +20,15 @@ const AddNotes = ({ closeModal,getAllNotes }) => {
             tags,
             isPinned: false,
         });
-        toast.success("Note added successfully ✅");
+        toast.success("Note added successfully ",{
+              position: "bottom-left",
+                autoClose: 2000, 
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "dark",
+        });
         await getAllNotes();
         closeModal();
     }
