@@ -3,6 +3,7 @@ import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { addNote } from "../redux/notesSlice";
 import axiosInstance from "../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const AddNotes = ({ closeModal,getAllNotes }) => {
     const [title, setTitle] = useState("");
@@ -19,6 +20,7 @@ const AddNotes = ({ closeModal,getAllNotes }) => {
             tags,
             isPinned: false,
         });
+        toast.success("Note added successfully ✅");
         await getAllNotes();
         closeModal();
     }
@@ -64,6 +66,7 @@ const AddNotes = ({ closeModal,getAllNotes }) => {
             <button
                 className="bg-blue-500 w-full text-white font-medium py-1 text-2xl rounded-md"
                 onClick={addingNote}
+              
             >
                 Add
             </button>

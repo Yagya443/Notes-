@@ -45,9 +45,15 @@ const Login = () => {
             if (response.data && response.data.accessToken) {
                 localStorage.setItem("token", response.data.accessToken);
                 navigate("/");
+
             }
+                    toast.success("Login successfully");
+            
         } catch (error) {
             console.log(error);
+
+                    toast.success("Something went wrong");
+            
 
             if (
                 error.response &&
@@ -56,13 +62,10 @@ const Login = () => {
             ) {
                 setError(error.response.data.message);
             } else {
-                setError("An Unexpected Error Occure");
+                setError("An Unexpected Error Occur");
             }
         }
     }
-
-
-    
 
     return (
         <>
